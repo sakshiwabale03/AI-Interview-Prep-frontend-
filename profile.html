@@ -4,8 +4,120 @@
     <meta charset="UTF-8">
     <title>Profile | InterviewAI</title>
     <link rel="stylesheet" href="css/style.css">
-    <script defer src="script.js"></script>
+
+    <style>
+        body { font-family: Arial, sans-serif; background:#f4f6f9; }
+
+        .profile-page { padding: 40px; }
+
+        .profile-container {
+            display: flex;
+            gap: 40px;
+            margin-top: 30px;
+        }
+
+        .profile-card, .profile-details {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+        }
+
+        .profile-card {
+            width: 300px;
+            text-align: center;
+        }
+
+        .profile-image-section {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+
+        .profile-img-wrapper {
+            position: relative;
+            width: 140px;
+            height: 140px;
+        }
+
+        .profile-img-wrapper img {
+            width: 140px;
+            height: 140px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 4px solid #4e73df;
+        }
+
+        .camera-icon {
+            position: absolute;
+            bottom: 8px;
+            right: 8px;
+            background: #4e73df;
+            color: white;
+            border-radius: 50%;
+            padding: 6px 8px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .profile-details { flex: 1; }
+
+        .input-group { margin-bottom: 18px; }
+
+        .input-group input,
+        .input-group select {
+            width: 100%;
+            padding: 10px;
+            border-radius: 6px;
+            border: 1px solid #ccc;
+        }
+
+        .btn-primary {
+            background: #4e73df;
+            color: white;
+            padding: 10px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            width: 100%;
+        }
+
+        .profile-progress { margin-top: 15px; margin-bottom: 20px; }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: #eee;
+            border-radius: 20px;
+            overflow: hidden;
+        }
+
+        #progressFill {
+            height: 8px;
+            width: 0%;
+            background: #4e73df;
+            transition: 0.3s;
+        }
+
+        .profile-stats {
+            margin-top: 40px;
+            display: flex;
+            gap: 20px;
+        }
+
+        .stat-card {
+            flex: 1;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        }
+
+        small { color: gray; }
+    </style>
 </head>
+
 <body>
 
 <header class="navbar">
@@ -21,64 +133,75 @@
 
     <h1 class="page-title">My Profile 👤</h1>
 
+    <!-- Profile Completion -->
+    <div class="profile-progress">
+        <p>Profile Completion: <span id="progressText">0%</span></p>
+        <div class="progress-bar">
+            <div id="progressFill"></div>
+        </div>
+    </div>
+
     <div class="profile-container">
 
-        <!-- LEFT SIDE -->
+        <!-- LEFT CARD -->
         <div class="profile-card">
 
             <div class="profile-image-section">
-                <img id="profilePreview" 
-                     src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" 
-                     alt="Profile Picture">
-
-                <input type="file" id="imageUpload" hidden>
-                <button class="btn-outline" onclick="document.getElementById('imageUpload').click()">
-                    Change Photo
-                </button>
+                <div class="profile-img-wrapper">
+                    <img id="profilePreview"
+                         src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png">
+                    <label for="imageUpload" class="camera-icon">📷</label>
+                </div>
+                <input type="file" id="imageUpload" accept="image/*" hidden>
             </div>
 
-            <h2>Sakshi Wabale</h2>
-            <p>BTech - Computer Science</p>
+            <h2 id="displayName"></h2>
+            <p id="displayBranch"></p>
             <p>Pune, India</p>
 
         </div>
 
-        <!-- RIGHT SIDE -->
+        <!-- RIGHT FORM -->
         <div class="profile-details">
 
             <form id="profileForm">
 
                 <div class="input-group">
                     <label>Full Name</label>
-                    <input type="text" value="Sakshi Wabale">
+                    <input type="text" id="editName" maxlength="30">
+                    <small id="nameCounter">0/30 characters</small>
                 </div>
 
                 <div class="input-group">
                     <label>Email</label>
-                    <input type="email" value="sakshi@email.com">
+                    <input type="email" id="editEmail">
                 </div>
 
                 <div class="input-group">
                     <label>College</label>
-                    <input type="text" value="ABC Engineering College">
+                    <input type="text" id="editCollege">
                 </div>
 
                 <div class="input-group">
                     <label>Branch</label>
-                    <input type="text" value="Computer Science">
+                    <input type="text" id="editBranch">
                 </div>
 
                 <div class="input-group">
                     <label>Year</label>
-                    <select>
+                    <select id="editYear">
                         <option>1st Year</option>
                         <option>2nd Year</option>
                         <option>3rd Year</option>
-                        <option selected>Final Year</option>
+                        <option>Final Year</option>
                     </select>
                 </div>
 
-                <button type="submit" class="btn-primary full">Save Changes</button>
+                <button type="submit" class="btn-primary">
+                    Save Changes
+                </button>
+
+                <p id="lastUpdated" style="margin-top:15px; font-size:13px;"></p>
 
             </form>
 
@@ -86,32 +209,106 @@
 
     </div>
 
-    <!-- PERSONAL STATS -->
+    <!-- STATS -->
     <div class="profile-stats">
-
         <div class="stat-card">
             <h2>12</h2>
             <p>Total Interviews</p>
         </div>
-
         <div class="stat-card">
             <h2>78%</h2>
             <p>Average Score</p>
         </div>
-
         <div class="stat-card">
             <h2>85%</h2>
             <p>Best Performance</p>
         </div>
-
         <div class="stat-card">
             <h2>6/10</h2>
             <p>Confidence Level</p>
         </div>
-
     </div>
 
 </section>
+
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+
+    let name = localStorage.getItem("userName");
+    let email = localStorage.getItem("userEmail");
+    let college = localStorage.getItem("userCollege");
+    let branch = localStorage.getItem("userBranch");
+    let year = localStorage.getItem("userYear");
+    let image = localStorage.getItem("profileImage");
+    let updated = localStorage.getItem("lastUpdated");
+
+    if(name){
+        document.getElementById("displayName").innerText = name;
+        document.getElementById("editName").value = name;
+        document.getElementById("nameCounter").innerText = name.length + "/30 characters";
+    }
+
+    if(email) document.getElementById("editEmail").value = email;
+    if(college) document.getElementById("editCollege").value = college;
+    if(branch){
+        document.getElementById("displayBranch").innerText = branch;
+        document.getElementById("editBranch").value = branch;
+    }
+    if(year) document.getElementById("editYear").value = year;
+    if(image) document.getElementById("profilePreview").src = image;
+    if(updated) document.getElementById("lastUpdated").innerText = "Last updated: " + updated;
+
+    // Character Counter
+    document.getElementById("editName").addEventListener("input", function(){
+        document.getElementById("nameCounter").innerText =
+            this.value.length + "/30 characters";
+        updateProgress();
+    });
+
+    function updateProgress(){
+        let fields = [
+            editName.value,
+            editEmail.value,
+            editCollege.value,
+            editBranch.value,
+            editYear.value
+        ];
+        let filled = fields.filter(f => f.trim() !== "").length;
+        let percent = Math.round((filled/fields.length)*100);
+        progressFill.style.width = percent + "%";
+        progressText.innerText = percent + "%";
+    }
+
+    updateProgress();
+
+    document.getElementById("profileForm").addEventListener("submit", function(e){
+        e.preventDefault();
+
+        localStorage.setItem("userName", editName.value);
+        localStorage.setItem("userEmail", editEmail.value);
+        localStorage.setItem("userCollege", editCollege.value);
+        localStorage.setItem("userBranch", editBranch.value);
+        localStorage.setItem("userYear", editYear.value);
+        localStorage.setItem("lastUpdated", new Date().toLocaleString());
+
+        alert("Profile Updated Successfully!");
+        location.reload();
+    });
+
+    document.getElementById("imageUpload").addEventListener("change", function(e){
+        const file = e.target.files[0];
+        if(file){
+            const reader = new FileReader();
+            reader.onload = function(event){
+                profilePreview.src = event.target.result;
+                localStorage.setItem("profileImage", event.target.result);
+            }
+            reader.readAsDataURL(file);
+        }
+    });
+
+});
+</script>
 
 </body>
 </html>
