@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>AI Interview Session</title>
+
+<style>
+
+body{
+    margin:0;
+    font-family:'Segoe UI',sans-serif;
+    background:linear-gradient(135deg,#667eea,#764ba2);
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    height:100vh;
+    color:white;
+}
+
+.interview-box{
+    background:rgba(255,255,255,0.12);
+    backdrop-filter:blur(15px);
+    padding:40px;
+    width:650px;
+    max-width:90%;
+    border-radius:20px;
+    box-shadow:0 15px 40px rgba(0,0,0,0.2);
+    animation:fadeIn 0.6s ease-in-out;
+}
+
+@keyframes fadeIn{
+    from{opacity:0; transform:translateY(20px);}
+    to{opacity:1; transform:translateY(0);}
+}
+
+.header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:15px;
+}
+
+.timer{
+    font-weight:bold;
+    font-size:16px;
+}
+
+.progress{
+    font-size:14px;
+    opacity:0.9;
+    margin-bottom:15px;
+}
+
+.question{
+    font-size:18px;
+    margin-bottom:20px;
+}
+
+textarea{
+    width:100%;
+    height:120px;
+    border-radius:10px;
+    border:none;
+    padding:10px;
+    font-size:14px;
+    resize:none;
+    outline:none;
+}
+
+button{
+    margin-top:20px;
+    padding:12px 25px;
+    border-radius:25px;
+    border:none;
+    background:white;
+    color:#764ba2;
+    font-weight:bold;
+    cursor:pointer;
+    transition:0.3s;
+}
+
+button:hover{
+    transform:scale(1.05);
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="interview-box">
+
+    <div class="header">
+        <div id="interviewTitle"></div>
+        <div class="timer" id="timer"></div>
+    </div>
+
+    <div class="progress" id="progressText"></div>
+
+    <div class="question" id="questionText"></div>
+
+    <textarea id="answer" placeholder="Type your answer here..."></textarea>
+
+    <button onclick="nextQuestion()">Next</button>
+
+</div>
+
+<script>
+
+/* ===== Get Configuration From Dashboard ===== */
+
+let config = JSON.parse(localStorage.getItem("interviewConfig"));
+
+if(!config){
+    alert("No Interview Configuration Found!");
+    window.location.href="dashboard.html";
+}
+
+/* ===== Question Banks ===== */
+
+const technicalQuestions = [
+"Explain OOPS concepts.",
+"What is REST API?",
+"Difference between SQL and NoSQL?",
+"What is React lifecycle?",
+"What is normalization?",
+"Explain async and await.",
+"What is cloud computing?",
+"What is Git branching?",
+"What is data structure?",
+"What is API authentication?",
+"What is multithreading?",
+"What is DB indexing?",
+"What is microservices?",
+"What is CI/CD?",
+"What is virtualization?"
+];
+
+const hrQuestions = [
+"Tell me about yourself.",
+"Why should we hire you?",
+"What are your strengths?",
+"What are your weaknesses?",
+"Where do you see yourself in 5 years?",
+"Describe a challenging situation.",
+"Why do you want this job?",
+"What motivates you?",
+"How do you handle pressure?",
+"Why did you choose your degree?",
+"What is your biggest achievement?",
+"Describe teamwork experience.",
+"What is leadership to you?",
+"Why our company?",
+"Are you open to relocation?"
+];
+
+/* ===== Dynamic Question Logic ===== */
+
+let selectedBank = config.type === "Technical"
+    ? technicalQuestions
+    : hrQuestions;
+
+let totalQuestions = parseInt(config.questions);
+
+if(totalQuestions > selectedBank.length){
+    totalQuestions = selectedBank.length;
+}
+
+selectedBank = selectedBank.slice(0, totalQuestions);
+
+/* ===== Interview Variables ===== */
+
+let currentQuestion = 0;
+let answers = [];
+
+/* ===== Display Interview Title ===== */
+
+document.getElementById("interviewTitle").innerText =
+    config.type + " Interview (" + totalQuestions + " Questions)";
+
+/* ===== Timer Logic ===== */
+
+let totalMinutes = parseInt(config.duration);
+let timeRemaining = totalMinutes * 60;
+
+let timerInterval = setInterval(function(){
+
+    let minutes = Math.floor(timeRemaining / 60);
+    let seconds = timeRemaining % 60;
+
+    document.getElementById("timer").innerText =
+        minutes + ":" + (seconds < 10 ? "0"+seconds : seconds);
+
+    timeRemaining--;
+
+    // ⏰ If time ends → finish interview
+    if(timeRemaining < 0){
+        clearInterval(timerInterval);
+        finishInterview();
+    }
+
+},1000);
+
+/* ===== Load Question ===== */
+
+function loadQuestion(){
+    document.getElementById("progressText").innerText =
+        "Question " + (currentQuestion+1) + " of " + totalQuestions;
+
+    document.getElementById("questionText").innerText =
+        selectedBank[currentQuestion];
+}
+
+loadQuestion();
+
+/* ===== Next Question ===== */
+
+function nextQuestion(){
+
+    let answer = document.getElementById("answer").value;
+
+    if(answer.trim() === ""){
+        alert("Please write your answer!");
+        return;
+    }
+
+    answers.push(answer);
+
+    document.getElementById("answer").value = "";
+
+    currentQuestion++;
+
+    if(currentQuestion < totalQuestions){
+        loadQuestion();
+    }else{
+        finishInterview(); // ✅ Stop timer & redirect
+    }
+}
+
+/* ===== Finish Interview ===== */
+
+function finishInterview(){
+
+    // ✅ STOP TIMER
+    clearInterval(timerInterval);
+
+    // Save answers
+    localStorage.setItem("userAnswers", JSON.stringify(answers));
+
+    // Save summary for analytics
+    localStorage.setItem("interviewSummary", JSON.stringify({
+        type: config.type,
+        totalQuestions: totalQuestions,
+        answered: answers.length,
+        duration: config.duration,
+        completedAt: new Date().toLocaleString()
+    }));
+
+    alert("Interview Completed Successfully!");
+
+    // Redirect to analytics
+    window.location.href = "analytics.html";
+}
+
+</script>
+
+</body>
+</html>

@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Interview Analytics</title>
+
+<style>
+body{
+    margin:0;
+    font-family:'Segoe UI',sans-serif;
+    background:#f4f6f9;
+}
+
+/* Navbar */
+.navbar{
+    background:#2c3e50;
+    color:white;
+    padding:15px 30px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+}
+
+.container{
+    padding:30px;
+    max-width:1100px;
+    margin:auto;
+}
+
+/* Cards */
+.card{
+    background:white;
+    border-radius:12px;
+    padding:20px;
+    margin-bottom:20px;
+    box-shadow:0 5px 15px rgba(0,0,0,0.08);
+}
+
+/* Summary */
+.summary{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
+    gap:20px;
+}
+
+.summary-box{
+    background:#667eea;
+    color:white;
+    padding:20px;
+    border-radius:12px;
+    text-align:center;
+}
+
+.summary-box h3{
+    margin:0;
+    font-size:28px;
+}
+
+/* Score Bar */
+.progress-bar{
+    width:100%;
+    background:#e0e0e0;
+    border-radius:20px;
+    overflow:hidden;
+    margin-top:15px;
+}
+
+.progress-fill{
+    height:18px;
+    width:0%;
+    background:linear-gradient(90deg,#00c6ff,#0072ff);
+    transition:width 1s ease;
+}
+
+/* Performance Badge */
+.badge{
+    display:inline-block;
+    padding:6px 12px;
+    border-radius:20px;
+    font-weight:bold;
+    margin-top:10px;
+}
+
+.excellent{ background:#2ecc71; color:white; }
+.good{ background:#f1c40f; color:white; }
+.poor{ background:#e74c3c; color:white; }
+
+/* Answers */
+.answer{
+    border-left:4px solid #667eea;
+    padding:12px 15px;
+    margin:10px 0;
+    background:#f9fbff;
+    border-radius:6px;
+    transition:0.3s;
+}
+
+.answer:hover{
+    transform:scale(1.01);
+}
+
+/* Feedback */
+.feedback{
+    background:#eef2ff;
+    padding:15px;
+    border-radius:10px;
+    margin-top:15px;
+}
+
+button{
+    margin-top:20px;
+    padding:12px 25px;
+    border-radius:25px;
+    border:none;
+    background:#667eea;
+    color:white;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+button:hover{
+    opacity:0.9;
+}
+</style>
+</head>
+
+<body>
+
+<div class="navbar">
+    <h2>Interview Analytics</h2>
+    <div id="userType"></div>
+</div>
+
+<div class="container">
+
+    <!-- Summary -->
+    <div class="card">
+        <h3>Summary</h3>
+
+        <div class="summary">
+            <div class="summary-box">
+                <h3 id="totalQ">0</h3>
+                <p>Total Questions</p>
+            </div>
+
+            <div class="summary-box">
+                <h3 id="answered">0</h3>
+                <p>Answered</p>
+            </div>
+
+            <div class="summary-box">
+                <h3 id="score">0%</h3>
+                <p>Score</p>
+            </div>
+        </div>
+
+        <!-- Score Progress -->
+        <div class="progress-bar">
+            <div class="progress-fill" id="progressFill"></div>
+        </div>
+
+        <!-- Performance Badge -->
+        <div id="performanceBadge"></div>
+    </div>
+
+    <!-- AI Feedback -->
+    <div class="card">
+        <h3>AI Feedback</h3>
+        <div class="feedback" id="feedbackText">
+            Loading feedback...
+        </div>
+    </div>
+
+    <!-- Answers Section -->
+    <div class="card">
+        <h3>Your Answers</h3>
+        <div id="answersContainer"></div>
+    </div>
+
+    <button onclick="goDashboard()">Back to Dashboard</button>
+
+</div>
+
+<script>
+/* ===== Get Data ===== */
+let config = JSON.parse(localStorage.getItem("interviewConfig"));
+let answers = JSON.parse(localStorage.getItem("userAnswers")) || [];
+
+if(!config){
+    alert("No Data Found");
+    window.location.href="dashboard.html";
+}
+
+/* ===== Display Summary ===== */
+document.getElementById("userType").innerText =
+    config.type + " Interview";
+
+document.getElementById("totalQ").innerText = config.questions;
+document.getElementById("answered").innerText = answers.length;
+
+/* ===== Score Logic ===== */
+let score = Math.min(100, Math.round((answers.length / config.questions) * 100));
+document.getElementById("score").innerText = score + "%";
+document.getElementById("progressFill").style.width = score + "%";
+
+/* ===== Performance Level ===== */
+let badge = document.getElementById("performanceBadge");
+let feedback = document.getElementById("feedbackText");
+
+if(score >= 80){
+    badge.innerHTML = "<span class='badge excellent'>Excellent Performance</span>";
+    feedback.innerHTML = "Great job! You demonstrated strong understanding and confidence.";
+}
+else if(score >= 50){
+    badge.innerHTML = "<span class='badge good'>Good Performance</span>";
+    feedback.innerHTML = "Good effort! Work on clarity and providing structured answers.";
+}
+else{
+    badge.innerHTML = "<span class='badge poor'>Needs Improvement</span>";
+    feedback.innerHTML = "You need more practice. Focus on fundamentals and communication skills.";
+}
+
+/* ===== Display Answers ===== */
+let container = document.getElementById("answersContainer");
+
+answers.forEach((ans, index)=>{
+    let div = document.createElement("div");
+    div.className = "answer";
+    div.innerHTML = "<b>Q" + (index+1) + ":</b> " + ans;
+    container.appendChild(div);
+});
+
+/* ===== Back to Dashboard ===== */
+function goDashboard(){
+    window.location.href="dashboard.html";
+}
+</script>
+
+</body>
+</html>

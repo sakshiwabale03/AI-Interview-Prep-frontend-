@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Login | InterviewAI</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="signup-body">
+
+<div class="signup-container">
+
+    <!-- LEFT SIDE (Same as Signup) -->
+    <div class="signup-left">
+        <h1>Welcome Back 👋</h1>
+        <p>Continue your interview preparation journey with AI-powered feedback.</p>
+        <img src="https://cdn-icons-png.flaticon.com/512/3135/3135768.png" alt="Student Illustration">
+    </div>
+
+    <!-- RIGHT SIDE FORM -->
+    <div class="signup-form-box">
+        <h2>Login</h2>
+
+        <form id="loginForm">
+
+            <div class="input-group">
+                <label>Email</label>
+                <input type="email" required>
+            </div>
+
+            <div class="input-group">
+                <label>Password</label>
+                <input type="password" required>
+            </div>
+
+            <button type="submit" class="btn-primary full">
+                Login
+            </button>
+
+            <p class="login-link">
+                Don't have an account?
+                <a href="signup.html">Register</a>
+            </p>
+
+        </form>
+    </div>
+
+</div>
+
+<script>
+document.getElementById("loginForm").addEventListener("submit", function(e) {
+    e.preventDefault();
+    alert("Login Successful!");
+    window.location.href = "dashboard.html";
+});
+</script>
+
+</body>
+</html>

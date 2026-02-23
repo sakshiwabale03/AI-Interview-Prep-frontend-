@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Profile | InterviewAI</title>
+    <link rel="stylesheet" href="css/style.css">
+    <script defer src="script.js"></script>
+</head>
+<body>
+
+<header class="navbar">
+    <h2 class="logo">Interview<span>AI</span></h2>
+    <nav>
+        <a href="dashboard.html">Dashboard</a>
+        <a href="analytics.html">Analytics</a>
+        <a href="index.html" class="btn-outline">Logout</a>
+    </nav>
+</header>
+
+<section class="profile-page">
+
+    <h1 class="page-title">My Profile 👤</h1>
+
+    <div class="profile-container">
+
+        <!-- LEFT SIDE -->
+        <div class="profile-card">
+
+            <div class="profile-image-section">
+                <img id="profilePreview" 
+                     src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" 
+                     alt="Profile Picture">
+
+                <input type="file" id="imageUpload" hidden>
+                <button class="btn-outline" onclick="document.getElementById('imageUpload').click()">
+                    Change Photo
+                </button>
+            </div>
+
+            <h2>Sakshi Wabale</h2>
+            <p>BTech - Computer Science</p>
+            <p>Pune, India</p>
+
+        </div>
+
+        <!-- RIGHT SIDE -->
+        <div class="profile-details">
+
+            <form id="profileForm">
+
+                <div class="input-group">
+                    <label>Full Name</label>
+                    <input type="text" value="Sakshi Wabale">
+                </div>
+
+                <div class="input-group">
+                    <label>Email</label>
+                    <input type="email" value="sakshi@email.com">
+                </div>
+
+                <div class="input-group">
+                    <label>College</label>
+                    <input type="text" value="ABC Engineering College">
+                </div>
+
+                <div class="input-group">
+                    <label>Branch</label>
+                    <input type="text" value="Computer Science">
+                </div>
+
+                <div class="input-group">
+                    <label>Year</label>
+                    <select>
+                        <option>1st Year</option>
+                        <option>2nd Year</option>
+                        <option>3rd Year</option>
+                        <option selected>Final Year</option>
+                    </select>
+                </div>
+
+                <button type="submit" class="btn-primary full">Save Changes</button>
+
+            </form>
+
+        </div>
+
+    </div>
+
+    <!-- PERSONAL STATS -->
+    <div class="profile-stats">
+
+        <div class="stat-card">
+            <h2>12</h2>
+            <p>Total Interviews</p>
+        </div>
+
+        <div class="stat-card">
+            <h2>78%</h2>
+            <p>Average Score</p>
+        </div>
+
+        <div class="stat-card">
+            <h2>85%</h2>
+            <p>Best Performance</p>
+        </div>
+
+        <div class="stat-card">
+            <h2>6/10</h2>
+            <p>Confidence Level</p>
+        </div>
+
+    </div>
+
+</section>
+
+</body>
+</html>

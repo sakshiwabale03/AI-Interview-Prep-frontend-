@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sign Up</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:'Poppins',sans-serif;
+}
+
+body{
+    height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    background:linear-gradient(135deg,#4e73df 30%, #f8f9fc 30%);
+}
+
+.card{
+    width:380px;
+    background:#fff;
+    padding:35px;
+    border-radius:20px;
+    box-shadow:0 15px 40px rgba(0,0,0,0.15);
+}
+
+.card h2{
+    text-align:center;
+    margin-bottom:25px;
+}
+
+.input-group{
+    margin-bottom:18px;
+    position:relative;
+}
+
+.input-group input{
+    width:100%;
+    padding:12px;
+    border:1px solid #ddd;
+    border-radius:8px;
+    outline:none;
+    font-size:14px;
+}
+
+.toggle-eye{
+    position:absolute;
+    right:12px;
+    top:12px;
+    cursor:pointer;
+}
+
+.error{
+    color:red;
+    font-size:13px;
+    margin-top:5px;
+}
+
+button{
+    width:100%;
+    padding:12px;
+    background:#1d9bf0;
+    color:white;
+    border:none;
+    border-radius:8px;
+    cursor:pointer;
+    font-size:15px;
+    margin-top:10px;
+}
+
+button:hover{
+    background:#1877c9;
+}
+
+.divider{
+    text-align:center;
+    margin:20px 0;
+    color:#999;
+    font-size:13px;
+}
+
+.google-btn{
+    background:#fff;
+    color:#444;
+    border:1px solid #ddd;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    gap:10px;
+}
+
+.google-btn:hover{
+    background:#f1f1f1;
+}
+
+.login-link{
+    text-align:center;
+    margin-top:15px;
+    font-size:14px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="card">
+    <h2>Create Account</h2>
+
+    <div class="input-group">
+        <input type="text" id="firstName" placeholder="Full Name">
+        <div class="error" id="nameError"></div>
+    </div>
+
+    <div class="input-group">
+        <input type="email" id="email" placeholder="Email">
+        <div class="error" id="emailError"></div>
+    </div>
+
+    <div class="input-group">
+        <input type="password" id="password" placeholder="Password">
+        <span class="toggle-eye" onclick="togglePassword('password')">👁</span>
+        <div class="error" id="passwordError"></div>
+    </div>
+
+    <div class="input-group">
+        <input type="password" id="confirmPassword" placeholder="Confirm Password">
+        <span class="toggle-eye" onclick="togglePassword('confirmPassword')">👁</span>
+        <div class="error" id="confirmError"></div>
+    </div>
+
+    <button onclick="registerUser()">Sign Up</button>
+
+    <div class="divider">or</div>
+
+    <!-- Google Button -->
+    <button class="google-btn" onclick="googleSignup()">
+        <img src="https://cdn-icons-png.flaticon.com/512/2991/2991148.png" width="18">
+        Sign up with Google
+    </button>
+
+    <div class="login-link">
+        Already have an account? <a href="login.html">Login</a>
+    </div>
+</div>
+
+<script>
+function togglePassword(id){
+    let input = document.getElementById(id);
+    input.type = input.type === "password" ? "text" : "password";
+}
+
+function registerUser(){
+
+    let name = document.getElementById("firstName").value.trim();
+    let email = document.getElementById("email").value.trim();
+    let password = document.getElementById("password").value.trim();
+    let confirmPassword = document.getElementById("confirmPassword").value.trim();
+
+    let valid = true;
+
+    document.getElementById("nameError").innerText = "";
+    document.getElementById("emailError").innerText = "";
+    document.getElementById("passwordError").innerText = "";
+    document.getElementById("confirmError").innerText = "";
+
+    if(name.length < 3){
+        document.getElementById("nameError").innerText = "Name must be at least 3 characters.";
+        valid = false;
+    }
+
+    let emailPattern = /^[^ ]+@[^ ]+\.[a-z]{2,3}$/;
+    if(!email.match(emailPattern)){
+        document.getElementById("emailError").innerText = "Enter valid email address.";
+        valid = false;
+    }
+
+    if(password.length < 6){
+        document.getElementById("passwordError").innerText = "Password must be at least 6 characters.";
+        valid = false;
+    }
+
+    if(password !== confirmPassword){
+        document.getElementById("confirmError").innerText = "Passwords do not match.";
+        valid = false;
+    }
+
+    if(valid){
+        localStorage.setItem("userName", name);
+        localStorage.setItem("userEmail", email);
+        localStorage.setItem("userPassword", password);
+
+        alert("Registration Successful!");
+        window.location.href = "dashboard.html";
+    }
+}
+
+// Simulated Google Signup (For Project Demo)
+function googleSignup(){
+    let demoName = "Google User";
+    let demoEmail = "googleuser@gmail.com";
+
+    localStorage.setItem("userName", demoName);
+    localStorage.setItem("userEmail", demoEmail);
+    localStorage.setItem("userPassword", "google-auth");
+
+    alert("Signed up using Google!");
+    window.location.href = "dashboard.html";
+}
+</script>
+
+</body>
+</html>
